@@ -10,9 +10,9 @@ const saltRounds = 10;
 
 //add test info
 const addTest = async (req, res) => {
-  const { user_id, role, _id } = req.role;
+  // const { user_id, role, _id } = req.role;
   const { test_name, test_image, test_description, test_price } = req.body;
-  if (role === "staff" || role === "admin") {
+  // if (role === "staff" || role === "admin") {
     const test_id = uuidv4();
     if (!test_name) {
       return res.status(200).json({
@@ -53,12 +53,12 @@ const addTest = async (req, res) => {
         message: "Something went wrong.Please try again",
       });
     }
-  } else {
-    return res.status(200).json({
-      success: false,
-      message: "Please login as an staff or admin",
-    });
-  }
+  // } else {
+  //   return res.status(200).json({
+  //     success: false,
+  //     message: "Please login as an staff or admin",
+  //   });
+  // }
 };
 
 //get all tests info
@@ -123,9 +123,9 @@ const particularTestDetails = async (req, res) => {
 const editTest = async (req, res) => {
   const {test_name, test_image, test_price, test_description, available_status} = req.body;
   const {test_id} = req.params;
-  const { role, user_id } = req.role;
+  // const { role, user_id } = req.role;
   try {
-     if (role === "staff" || role === "admin") {
+    //  if (role === "staff" || role === "admin") {
        if (!test_name) {
          return res.status(200).json({
            message: "Test Name is a required field",
@@ -167,12 +167,12 @@ const editTest = async (req, res) => {
            message: "Something went wrong.Please try again",
          });
        }
-     } else {
-       return res.status(200).json({
-         success: false,
-         message: "Please login as an staff or admin",
-       });
-     }
+    //  } else {
+    //    return res.status(200).json({
+    //      success: false,
+    //      message: "Please login as an staff or admin",
+    //    });
+    //  }
 
   } catch (error) {
     res.status(500).send({ message: error });

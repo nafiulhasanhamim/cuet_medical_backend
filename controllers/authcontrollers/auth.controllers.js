@@ -7,6 +7,7 @@ const passport = require("passport");
 const { createToken } = require("../../helpers/jsonwebtoken");
 const emailWithNodeMailer = require("../../helpers/email");
 const saltRounds = 10;
+
 const getAllUser = async (req, res) => {
   try {
     const users = await User.find();
@@ -89,7 +90,7 @@ const registrationPatient = async (req, res) => {
       "message":"Name is a required field"
     })
   } else if(!user_image) {
-    return res.status.json({
+    return res.status(200).json({
       "message": "Image is a required field"
     })
   } else if(!phone_number) {
@@ -274,7 +275,7 @@ const loginUser = async (req, res) => {
     },
   ]);
 
-  if (user.length === 0) {
+  if (user?.length === 0) {
     return res.status(201).send({
       success: false,
       message: "User is not found",
@@ -294,12 +295,18 @@ const loginUser = async (req, res) => {
     role: user[0].role,
   };
   const token = createToken(payload, "1d");
-  res.cookie("token", token, { httpOnly: true });
+  // console.log(token)
+  res.cookie("token", token, {
+    httpOnly: false,
+    sameSite: "None",
+    // secure: true,
+  });
   return res.status(200).send({
     success: true,
     message: "User is logged in successfully",
     userinfo: {
       name: user[0].name,
+      _id: user[0]._id,
       user_id: user[0].user_id,
       role: user[0].role,
     },
@@ -330,7 +337,9 @@ const identifyUser = async (req, res) => {
 
 //detect the role of the user
 const detectUserRole = (req, res, next) => {
+  // console.log("hiiii");
   let { token } = req.cookies;
+  // console.log(token)
   if (token) {
     token = token.split(" ")[1];
     jwt.verify(token, process.env.SECRET_KEY, (err, valid) => {

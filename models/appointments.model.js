@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const users = require("./shop.model");
 const appointmentsSchema = new mongoose.Schema({
   doctor: {
     type: mongoose.Schema.Types.ObjectId,
@@ -25,7 +24,15 @@ const appointmentsSchema = new mongoose.Schema({
       message: "Provided user must have the role of patient.",
     },
   },
+  problem_description: {
+    type: String,
+    required: true
+  },
   appointment_status: {
+    type: String,
+    required: true,
+  },
+  medicine_supply_status: {
     type: String,
     required: true,
   },
@@ -36,6 +43,10 @@ const appointmentsSchema = new mongoose.Schema({
       },
       note: {
         type: String,
+        required: true,
+      },
+      piece: {
+        type: Number,
         required: true
       }
     },
